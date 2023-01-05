@@ -1,0 +1,34 @@
+\documentclass[12pt]{standalone}
+\usepackage{tikz}
+
+\begin{document}
+\usetikzlibrary{calc,fpu}
+\tikzstyle{every node}=[fill=black,circle,inner sep=2pt]
+
+%%%%% CHANGE PARAMETERS HERE %%%%%%%
+% Defines the number of nodes:
+\def\NN{40}
+% Defines the probability with which each edge appears:
+\def\pp{0.05}
+% To define prob. as a function of number of nodes, comment preceding line and uncomment the one below:
+%\pgfmathsetmacro\pp{0.95*ln(\NN)/(\NN)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\pgfmathsetseed{\number\pdfrandomseed}
+
+\begin{tikzpicture}
+	\foreach \i in {1,...,\NN} {
+		\draw (-360/\NN+\i*360/\NN: .15*\NN cm) node[label=-360/\NN+\i*360/\NN:\i] (v\i) {};
+		}
+	\foreach \i in {1,...,\NN} {
+		\foreach \j in {\i,...,\NN} {
+			\pgfkeys{/pgf/fpu=true}
+      		\pgfmathparse{rnd<\pp} 
+      		\ifpgfmathfloatcomparison
+				\draw (v\i.center)--(v\j.center);
+			\fi
+		};
+	}
+\end{tikzpicture}
+
+\end{document}
